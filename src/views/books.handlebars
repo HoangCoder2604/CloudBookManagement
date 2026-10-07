@@ -1,0 +1,133 @@
+<section class="hero">
+  <div>
+    <span class="eyebrow">CLOUD COMPUTING MIDTERM</span>
+    <h1>Quản lý Sách</h1>
+    <p>Express + MongoDB Atlas + Stateless Session + Vercel</p>
+  </div>
+  <div class="student-card">
+    <span>Sinh viên</span>
+    <strong>{{student.studentName}}</strong>
+    <span>{{student.mssv}}</span>
+  </div>
+</section>
+
+{{#if message}}
+  <div class="alert success">{{message}}</div>
+{{/if}}
+
+{{#if error}}
+  <div class="alert error">{{error}}</div>
+{{/if}}
+
+<div class="grid">
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <span class="eyebrow">READ</span>
+        <h2>Danh sách sách</h2>
+      </div>
+      <span class="role-chip">READ USER</span>
+    </div>
+
+    {{#if books.length}}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Tên sách</th>
+              <th>Giá gốc</th>
+              <th>VAT</th>
+              <th>Giá sau thuế</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each books}}
+              <tr>
+                <td><code>{{code}}</code></td>
+                <td>{{name}}</td>
+                <td>{{currency price}} đ</td>
+                <td>{{vat}}%</td>
+                <td><strong>{{currency finalPrice}} đ</strong></td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    {{else}}
+      <div class="empty">Chưa có sách. Hãy đăng nhập và thêm sách đầu tiên.</div>
+    {{/if}}
+  </section>
+
+  <aside class="panel">
+    <div class="panel-header">
+      <div>
+        <span class="eyebrow">WRITE</span>
+        <h2>Thêm sách</h2>
+      </div>
+      <span class="role-chip">WRITE USER</span>
+    </div>
+
+    {{#if isLoggedIn}}
+      <form action="/books" method="POST" class="book-form">
+        <label>
+          Mã sản phẩm
+          <input
+            name="code"
+            placeholder="{{student.last3}}BOOK001"
+            required
+          >
+          <small>Bắt buộc bắt đầu bằng {{student.last3}}</small>
+        </label>
+
+        <label>
+          Tên sách
+          <input name="name" placeholder="Ví dụ: Lập trình Node.js" required>
+        </label>
+
+        <label>
+          Giá gốc
+          <input name="price" type="number" min="0" step="1" placeholder="100000" required>
+        </label>
+
+        <div class="vat-box">
+          <span>VAT hiện tại</span>
+          <strong>{{student.vat}}%</strong>
+        </div>
+
+        <button class="btn btn-primary full" type="submit">
+          Thêm sách
+        </button>
+      </form>
+    {{else}}
+      <div class="login-required">
+        <p>Bạn cần đăng nhập để sử dụng chức năng thêm mới.</p>
+        <a class="btn btn-primary full" href="/auth/login">Đăng nhập</a>
+      </div>
+    {{/if}}
+  </aside>
+</div>
+
+<section class="architecture">
+  <div>
+    <span class="eyebrow">CLOUD ARCHITECTURE</span>
+    <h2>Kiến trúc bảo mật & Stateless</h2>
+  </div>
+
+  <div class="flow">
+    <div class="flow-node">Browser</div>
+    <span>→</span>
+    <div class="flow-node">Vercel<br>Express</div>
+    <span>→</span>
+    <div class="flow-node read">READ<br>Mongo User</div>
+    <span>+</span>
+    <div class="flow-node write">WRITE<br>Mongo User</div>
+    <span>→</span>
+    <div class="flow-node">MongoDB<br>Atlas</div>
+  </div>
+
+  <p class="note">
+    Session được lưu tập trung trong MongoDB Atlas thông qua connect-mongo,
+    không lưu Session trong RAM của server.
+  </p>
+</section>
